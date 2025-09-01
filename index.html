@@ -6,5 +6,124 @@
     <title>App</title>
     <link rel="stylesheet" href="css/main.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="card-cover">
+              <img src="images/wallpaper-4.jpeg" alt />
+            </div>
+            <div class="card-head">
+              <img src="images/chip.png" width="60" height="48" alt="Chip" />
+              <img src="images/visa.png" width="85" height="45" alt="Visa" />
+            </div>
+            <div class="card-body">
+              <label class="card-number" for="cardNumber">
+                <div>####</div>
+                <div>####</div>
+                <div>####</div>
+                <div>####</div>
+              </label>
+            </div>
+            <div class="card-tail">
+              <label class="card-tail-item card-holder" for="cardHolder">
+                <div class="card-label">Card Holder</div>
+                <div class="card-value">FULL NAME</div>
+              </label>
+              <label class="card-tail-item card-expiry" for="cardExpiry">
+                <div class="card-label">Expires</div>
+                <div class="card-value">MM/YY</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="card-back">
+            <div class="card-cover">
+              <img src="images/wallpaper-4.jpeg" alt />
+            </div>
+            <div class="card-strip"></div>
+            <div class="card-cvv">
+              <div class="card-cvv-label">CVV</div>
+              <div class="card-cvv-strip">
+                <span>***</span>
+              </div>
+              <img
+                class="card-cvv-logo"
+                src="images/visa.png"
+                width="85"
+                height="45"
+                alt="Visa"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="form">
+        <div class="form-field">
+          <label class="form-label" for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            class="form-control"
+            type="email"
+            autocomplete="off"
+            placeholder="email@site.com"
+          />
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="cardNumber">Card Number</label>
+          <input
+            id="cardNumber"
+            name="cardNumber"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+            placeholder="0000 0000 0000 0000"
+          />
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="cardHolder">Card Holder</label>
+          <input
+            id="cardHolder"
+            name="cardHolder"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+            placeholder="Full Name"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="cardExpiry">Expires</label>
+            <input
+              id="cardExpiry"
+              name="cardExpiry"
+              class="form-control"
+              type="text"
+              autocomplete="off"
+              placeholder="MM/YY"
+            />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="cardCVV">CVV</label>
+            <input
+              id="cardCVV"
+              name="cardCVV"
+              class="form-control"
+              type="text"
+              autocomplete="off"
+              placeholder="***"
+            />
+          </div>
+        </div>
+
+        <button class="form-submit-button" type="submit">Submit</button>
+      </form>
+    </div>
+  </body>
 </html>
