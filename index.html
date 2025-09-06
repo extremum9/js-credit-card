@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="card card-js">
+      <div class="card js-card">
         <div class="card-inner">
           <div class="card-front">
             <div class="card-head">
@@ -41,7 +41,7 @@
             <div class="card-cvv">
               <div class="card-cvv-label">CVV</div>
               <div class="card-cvv-strip">
-                <span>***</span>
+                <span>XXX</span>
               </div>
               <img
                 class="card-cvv-logo"
@@ -55,41 +55,68 @@
         </div>
       </div>
 
-      <form class="form">
+      <form class="form js-form" novalidate>
         <div class="form-field">
           <label class="form-label" for="email">Email</label>
           <input
             id="email"
-            name="email"
             class="form-control"
+            name="email"
             type="email"
-            autocomplete="off"
-            placeholder="email@site.com"
+            placeholder="example@mail.com"
+            maxlength="128"
+            required
+            aria-invalid="false"
+            aria-errormessage="emailError"
           />
+          <span
+            id="emailError"
+            class="form-field-error js-form-field-error"
+            aria-live="assertive"
+          ></span>
         </div>
 
         <div class="form-field">
           <label class="form-label" for="cardNumber">Card Number</label>
           <input
             id="cardNumber"
-            name="cardNumber"
             class="form-control"
-            type="text"
-            autocomplete="off"
-            placeholder="0000 0000 0000 0000"
+            name="cardNumber"
+            type="tel"
+            inputmode="numeric"
+            autocomplete="cc-number"
+            placeholder="XXXX XXXX XXXX XXXX"
+            maxlength="19"
+            required
+            aria-invalid="false"
+            aria-errormessage="cardNumberError"
           />
+          <span
+            id="cardNumberError"
+            class="form-field-error js-form-field-error"
+            aria-live="assertive"
+          ></span>
         </div>
 
         <div class="form-field">
           <label class="form-label" for="cardHolder">Card Holder</label>
           <input
             id="cardHolder"
-            name="cardHolder"
             class="form-control"
+            name="cardHolder"
             type="text"
             autocomplete="off"
             placeholder="Full Name"
+            maxlength="32"
+            required
+            aria-invalid="false"
+            aria-errormessage="cardHolderError"
           />
+          <span
+            id="cardHolderError"
+            class="form-field-error js-form-field-error"
+            aria-live="assertive"
+          ></span>
         </div>
 
         <div class="form-row">
@@ -97,27 +124,46 @@
             <label class="form-label" for="cardExpiry">Expires</label>
             <input
               id="cardExpiry"
-              name="cardExpiry"
               class="form-control"
-              type="text"
+              name="cardExpiry"
+              type="tel"
               autocomplete="off"
               placeholder="MM/YY"
+              maxlength="7"
+              required
+              aria-invalid="false"
+              aria-errormessage="cardExpiryError"
             />
+            <span
+              id="cardExpiryError"
+              class="form-field-error js-form-field-error"
+              aria-live="assertive"
+            ></span>
           </div>
+
           <div class="form-field">
-            <label class="form-label" for="cardCVV">CVV</label>
+            <label class="form-label" for="cardSecurityCode">CVV</label>
             <input
-              id="cardCVV"
-              name="cardCVV"
+              id="cardSecurityCode"
               class="form-control"
-              type="text"
+              name="cardSecurityCode"
+              type="password"
               autocomplete="off"
-              placeholder="***"
+              placeholder="XXX"
+              maxlength="3"
+              required
+              aria-invalid="false"
+              aria-errormessage="cardSecurityCodeError"
             />
+            <span
+              id="cardSecurityCodeError"
+              class="form-field-error js-form-field-error"
+              aria-live="assertive"
+            ></span>
           </div>
         </div>
 
-        <button class="form-submit-button" type="submit">Submit</button>
+        <button class="form-submit-button" type="submit">Checkout</button>
       </form>
     </div>
   </body>

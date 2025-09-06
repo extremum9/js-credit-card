@@ -217,6 +217,11 @@ body {
   }
 }
 
+.form-field-error {
+  font-size: 0.875rem;
+  color: #ff0000;
+}
+
 .form-submit-button {
   height: 3.438rem;
   white-space: nowrap;
