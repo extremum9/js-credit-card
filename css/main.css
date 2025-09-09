@@ -183,6 +183,9 @@ body {
   display: flex;
   flex-direction: column;
   row-gap: 0.313rem;
+  &.has-error .form-control {
+    border-color: #ff0000;
+  }
 }
 
 .form-row {
