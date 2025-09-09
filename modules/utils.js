@@ -20,3 +20,19 @@ export const validCard = (card) => {
   
   return sum % 10 === 0;
 }
+
+export const validExpiry = (expiry) => {
+  const formatted = expiry.split('/').map(Number);
+  const month = formatted[0];
+  const year = formatted[1];
+  
+  if (!month || !year || month > 12) {
+    return false;
+  }
+  
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear() % 100;
+  const currentMonth = currentDate.getMonth() + 1;
+  
+  return year > currentYear || (year === currentYear && month >= currentMonth);
+};

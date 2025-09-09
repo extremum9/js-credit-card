@@ -1,4 +1,4 @@
-import {getRandomInt, validCard} from './utils.js'
+import {getRandomInt, validCard, validExpiry} from './utils.js'
 
 const TOTAL_IMAGES = 14;
 
@@ -34,7 +34,7 @@ const validators = {
     message
   }),
   expiry: (message) => ({
-    validate: (value) => true,
+    validate: (value) => validExpiry(value),
     message
   }),
   cvv: (message) => ({
