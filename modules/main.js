@@ -1,4 +1,4 @@
-import {getRandomInt} from './utils.js'
+import {getRandomInt, validCard} from './utils.js'
 
 const TOTAL_IMAGES = 14;
 
@@ -30,7 +30,7 @@ const validators = {
     message
   }),
   card: (message) => ({
-    validate: (value) => true,
+    validate: (value) => validCard(value),
     message
   }),
   expiry: (message) => ({
@@ -76,9 +76,12 @@ const validateField = (control) => {
 };
 
 form.addEventListener('blur', (event) => {
-  event.preventDefault();
   const target = event.target;
   if (target.required) {
     validateField(target);
   }
 }, { capture: true });
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+});
