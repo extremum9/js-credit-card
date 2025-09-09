@@ -19,7 +19,7 @@ export const validCard = (card) => {
   }
   
   return sum % 10 === 0;
-}
+};
 
 export const validExpiry = (expiry) => {
   const formatted = expiry.split('/').map(Number);
@@ -36,3 +36,5 @@ export const validExpiry = (expiry) => {
   
   return year > currentYear || (year === currentYear && month >= currentMonth);
 };
+
+export const validCVV = (cvv) => /^\d{3,4}$/.test(cvv);
