@@ -1,4 +1,5 @@
-import {getRandomInt, validCard, validCVV, validExpiry} from './utils.js'
+import {getRandomInt} from './utils.js'
+import {validators} from './validators.js'
 
 const TOTAL_IMAGES = 14;
 
@@ -20,35 +21,12 @@ const form = document.querySelector(selectors.form);
 // const cardExpiryControl = form.cardExpiry;
 // const cardSecurityCodeControl = form.cardSecurityCode;
 
-const validators = {
-  required: (message) => ({
-    validate: (value) => value.trim() !== '',
-    message
-  }),
-  email: (message) => ({
-    validate: (value) => /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z\d-]+\.[a-z]{2,}$/i.test(value),
-    message
-  }),
-  card: (message) => ({
-    validate: (value) => validCard(value),
-    message
-  }),
-  expiry: (message) => ({
-    validate: (value) => validExpiry(value),
-    message
-  }),
-  cvv: (message) => ({
-    validate: (value) => validCVV(value),
-    message
-  })
-};
-
 const validationConfig = {
   email: [validators.required('Enter your email'), validators.email('Incorrect email')],
   cardNumber: [validators.required('Enter your card'), validators.card('Incorrect card')],
   cardHolder: [validators.required('Enter your full name')],
   cardExpiry: [validators.required('Enter your expiry'), validators.expiry('Incorrect expiry')],
-  cardSecurityCode: [validators.required('Enter your CVV'), validators.cvv('Incorrect CVV')]
+  cvvCode: [validators.required('Enter your CVV'), validators.cvv('Incorrect CVV')]
 };
 
 const updateError = (control, error) => {
