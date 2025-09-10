@@ -1,4 +1,4 @@
-import {formatCardNumber, getRandomInt} from './utils.js'
+import {formatCardNumber, formatExpiryDate, getRandomInt} from './utils.js'
 import {validators} from './validators.js'
 
 const TOTAL_IMAGES = 14;
@@ -18,7 +18,7 @@ card.style.setProperty('--card-background-image', randomCardImage);
 
 const form = document.querySelector(selectors.form);
 const cardNumberControl = form.cardNumber;
-// const cardExpiryDateControl = form.cardExpiry;
+const cardExpiryDateControl = form.cardExpiryDate;
 // const cardCVVCodeControl = form.cardSecurityCode;
 
 const validationConfig = {
@@ -56,6 +56,11 @@ const validateField = (control) => {
 cardNumberControl.addEventListener('input', (event) => {
   const target = event.target;
   target.value = formatCardNumber(target.value);
+});
+
+cardExpiryDateControl.addEventListener('input', (event) => {
+  const target = event.target;
+  target.value = formatExpiryDate(target.value);
 });
 
 form.addEventListener('blur', (event) => {
