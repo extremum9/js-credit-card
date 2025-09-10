@@ -29,7 +29,7 @@
                 <div class="card-label">Card Holder</div>
                 <div class="card-value">FULL NAME</div>
               </label>
-              <label class="card-tail-item card-expiry" for="cardExpiry">
+              <label class="card-tail-item" for="cardExpiryDate">
                 <div class="card-label">Expires</div>
                 <div class="card-value">MM/YY</div>
               </label>
@@ -121,21 +121,21 @@
 
         <div class="form-row">
           <div class="form-field">
-            <label class="form-label" for="cardExpiry">Expires</label>
+            <label class="form-label" for="cardExpiryDate">Expires</label>
             <input
-              id="cardExpiry"
+              id="cardExpiryDate"
               class="form-control"
-              name="cardExpiry"
+              name="cardExpiryDate"
               type="tel"
               autocomplete="off"
               placeholder="MM/YY"
               maxlength="7"
               required
               aria-invalid="false"
-              aria-errormessage="cardExpiryError"
+              aria-errormessage="cardExpiryDateError"
             />
             <span
-              id="cardExpiryError"
+              id="cardExpiryDateError"
               class="form-field-error js-form-field-error"
               aria-live="polite"
             ></span>

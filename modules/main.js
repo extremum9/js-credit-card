@@ -1,4 +1,4 @@
-import {getRandomInt} from './utils.js'
+import {formatCardNumber, getRandomInt} from './utils.js'
 import {validators} from './validators.js'
 
 const TOTAL_IMAGES = 14;
@@ -17,15 +17,15 @@ const card = document.querySelector(selectors.card);
 card.style.setProperty('--card-background-image', randomCardImage);
 
 const form = document.querySelector(selectors.form);
-// const cardNumberControl = form.cardNumber;
-// const cardExpiryControl = form.cardExpiry;
-// const cardSecurityCodeControl = form.cardSecurityCode;
+const cardNumberControl = form.cardNumber;
+// const cardExpiryDateControl = form.cardExpiry;
+// const cardCVVCodeControl = form.cardSecurityCode;
 
 const validationConfig = {
   email: [validators.required('Enter your email'), validators.email('Incorrect email')],
-  cardNumber: [validators.required('Enter your card'), validators.card('Incorrect card')],
+  cardNumber: [validators.required('Enter your card number'), validators.cardNumber('Incorrect card number')],
   cardHolder: [validators.required('Enter your full name')],
-  cardExpiry: [validators.required('Enter your expiry'), validators.expiry('Incorrect expiry')],
+  cardExpiryDate: [validators.required('Enter your expiry date'), validators.expiryDate('Incorrect expiry date')],
   cvvCode: [validators.required('Enter your CVV'), validators.cvv('Incorrect CVV')]
 };
 
@@ -52,6 +52,11 @@ const validateField = (control) => {
   
   updateError(control, error);
 };
+
+cardNumberControl.addEventListener('input', (event) => {
+  const target = event.target;
+  target.value = formatCardNumber(target.value);
+});
 
 form.addEventListener('blur', (event) => {
   const target = event.target;

@@ -4,8 +4,8 @@ const requiredValidator = (value) => value.trim() !== '';
 
 const emailValidator = (email) => EMAIL_REGEXP.test(email);
 
-const cardValidator = (card) => {
-	const formatted = card.replace(/\D/g, '');
+const cardNumberValidator = (number) => {
+	const formatted = number.replace(/\D/g, '');
 	let sum = 0;
 	let even = false;
 	
@@ -23,8 +23,8 @@ const cardValidator = (card) => {
 	return sum % 10 === 0;
 };
 
-const expiryValidator = (expiry) => {
-	const formatted = expiry.split('/').map(Number);
+const expiryDateValidator = (date) => {
+	const formatted = date.split('/').map(Number);
 	const month = formatted[0];
 	const year = formatted[1];
 	
@@ -50,12 +50,12 @@ export const validators = {
 		validate: emailValidator,
 		message
 	}),
-	card: (message) => ({
-		validate: cardValidator,
+	cardNumber: (message) => ({
+		validate: cardNumberValidator,
 		message
 	}),
-	expiry: (message) => ({
-		validate: expiryValidator,
+	expiryDate: (message) => ({
+		validate: expiryDateValidator,
 		message
 	}),
 	cvv: (message) => ({
