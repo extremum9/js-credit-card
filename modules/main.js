@@ -1,27 +1,11 @@
-import {
-  formatCardNumber,
-  formatCVVCode,
-  formatExpiryDate,
-  getRandomInt
-} from './utils.js'
+import {formatCardNumber, formatCVVCode, formatExpiryDate} from './utils.js'
 import {validators} from './validators.js'
+import {SELECTORS} from './selectors.js'
+import {generateRandomCardImage} from './random-card-image.js'
 
-const TOTAL_IMAGES = 14;
+generateRandomCardImage();
 
-const selectors = {
-  card: '.js-card',
-  form: '.js-form',
-  fieldError: '.js-form-field-error'
-};
-
-const randomCardImage = `url(../images/wallpaper-${getRandomInt(
-  TOTAL_IMAGES
-)}.jpeg)`;
-
-const card = document.querySelector(selectors.card);
-card.style.setProperty('--card-background-image', randomCardImage);
-
-const form = document.querySelector(selectors.form);
+const form = document.querySelector(SELECTORS.form);
 const cardNumberControl = form.cardNumber;
 const cardExpiryDateControl = form.cardExpiryDate;
 const cardCVVCodeControl = form.cardCVVCode;
@@ -37,12 +21,12 @@ const validationConfig = {
 const updateError = (control, error) => {
   const field = control.parentElement;
   field.classList.toggle('has-error', !!error);
-  const fieldError = field.querySelector(selectors.fieldError);
+  const fieldError = field.querySelector(SELECTORS.fieldError);
   fieldError.textContent = error ? error : '';
   control.setAttribute('aria-invalid', String(!!error));
 };
 
-const validateField = (control) => {
+const validateControl = (control) => {
   if (!validationConfig[control.id]) {
     return;
   }
@@ -76,7 +60,7 @@ cardCVVCodeControl.addEventListener('input', (event) => {
 form.addEventListener('blur', (event) => {
   const target = event.target;
   if (target.required) {
-    validateField(target);
+    validateControl(target);
   }
 }, { capture: true });
 

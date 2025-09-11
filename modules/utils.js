@@ -14,4 +14,4 @@ export const formatExpiryDate = (date) => {
 
 export const formatCVVCode = (cvv) => {
   return cvv.replace(/\D/g, '');
-}
+};
