@@ -41,7 +41,7 @@ const expiryDateValidator = (date) => {
 
 const CVVCodeValidator = (cvv) => /^\d{3,4}$/.test(cvv);
 
-export const validators = {
+const validators = {
 	required: (message) => ({
 		validate: requiredValidator,
 		message
@@ -63,3 +63,5 @@ export const validators = {
 		message
 	})
 };
+
+export default validators;
