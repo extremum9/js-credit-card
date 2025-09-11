@@ -57,30 +57,11 @@
 
       <form class="form js-form" novalidate>
         <div class="form-field">
-          <label class="form-label" for="email">Email</label>
-          <input
-            id="email"
-            class="form-control"
-            name="email"
-            type="email"
-            placeholder="example@mail.com"
-            maxlength="128"
-            required
-            aria-invalid="false"
-            aria-errormessage="emailError"
-          />
-          <span
-            id="emailError"
-            class="form-field-error js-form-field-error"
-            aria-live="polite"
-          ></span>
-        </div>
-
-        <div class="form-field">
           <label class="form-label" for="cardNumber">Card Number</label>
           <input
             id="cardNumber"
             class="form-control"
+            data-next="cardHolder"
             name="cardNumber"
             type="tel"
             inputmode="numeric"
@@ -103,6 +84,7 @@
           <input
             id="cardHolder"
             class="form-control"
+            data-next="cardExpiryDate"
             name="cardHolder"
             type="text"
             autocomplete="off"
@@ -125,6 +107,7 @@
             <input
               id="cardExpiryDate"
               class="form-control"
+              data-next="cardCVVCode"
               name="cardExpiryDate"
               type="tel"
               autocomplete="off"
@@ -162,6 +145,26 @@
             ></span>
           </div>
         </div>
+	      
+	      <div class="form-field">
+		      <label class="form-label" for="email">Email</label>
+		      <input
+			      id="email"
+			      class="form-control"
+			      name="email"
+			      type="email"
+			      placeholder="example@mail.com"
+			      maxlength="128"
+			      required
+			      aria-invalid="false"
+			      aria-errormessage="emailError"
+		      />
+		      <span
+			      id="emailError"
+			      class="form-field-error js-form-field-error"
+			      aria-live="polite"
+		      ></span>
+	      </div>
 
         <button class="form-submit-button" type="submit">Checkout</button>
       </form>
