@@ -1,3 +1,5 @@
+import {checkLuhn, getCardType} from './utils.js'
+
 const EMAIL_REGEXP = /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z\d-]+\.[a-z]{2,}$/;
 
 const requiredValidator = (value) => value.trim() !== '';
@@ -5,29 +7,14 @@ const requiredValidator = (value) => value.trim() !== '';
 const emailValidator = (email) => EMAIL_REGEXP.test(email);
 
 const cardNumberValidator = (number) => {
-	const formatted = number.replace(/\D/g, '');
-	let sum = 0;
-	let even = false;
+	const sanitized = number.replace(/\D/g, '');
+	const type = getCardType(sanitized);
 	
-	for (let index = formatted.length - 1; index >= 0; index--) {
-		let digit = +formatted[index];
-		
-		if (even && (digit *= 2) > 9) {
-			digit -= 9;
-		}
-		
-		sum += digit;
-		even = !even;
-	}
-	
-	return sum % 10 === 0;
+	return type === 'unknown' ? false : checkLuhn(sanitized);
 };
 
 const expiryDateValidator = (date) => {
-	const formatted = date.split('/').map(Number);
-	const month = formatted[0];
-	const year = formatted[1];
-	
+	const [month, year] = date.split('/').map(Number);
 	if (!month || !year || month > 12) {
 		return false;
 	}
@@ -39,7 +26,7 @@ const expiryDateValidator = (date) => {
 	return year > currentYear || (year === currentYear && month >= currentMonth);
 };
 
-const CVVCodeValidator = (cvv) => /^\d{3,4}$/.test(cvv);
+const CVVCodeValidator = (cvv) => /^\d{3}$/.test(cvv);
 
 const validators = {
 	required: (message) => ({
