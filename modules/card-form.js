@@ -1,5 +1,16 @@
 import validators from './validators.js';
-import { formatCardNumber, formatCVVCode, formatExpiryDate } from './utils.js';
+import {
+  formatCardNumber,
+  formatCVVCode,
+  formatExpiryDate,
+  getCardType
+} from './utils.js';
+
+const CARD_NUMBER_DEFAULT_MASK = 'XXXX XXXX XXXX XXXX';
+const CARD_NUMBER_AMEX_MASK = 'XXXX XXXXXX XXXXX';
+
+const CVV_DEFAULT_MASK = 'XXX';
+const CVV_AMEX_MASK = 'XXXX';
 
 class CardForm {
   selectors = {
@@ -36,6 +47,24 @@ class CardForm {
     this.bindEvents();
   }
 
+  updateCardType(type) {
+    switch (type) {
+      case 'amex':
+        this.cardNumberControl.maxLength = CARD_NUMBER_AMEX_MASK.length;
+        this.cardCVVCodeControl.maxLength = CVV_AMEX_MASK.length;
+        this.cardCVVCodeControl.placeholder = CVV_AMEX_MASK;
+        break;
+      case 'visa':
+      case 'mastercard':
+      case 'discover':
+      default:
+        this.cardNumberControl.maxLength = CARD_NUMBER_DEFAULT_MASK.length;
+        this.cardCVVCodeControl.maxLength = CVV_DEFAULT_MASK.length;
+        this.cardCVVCodeControl.placeholder = CVV_DEFAULT_MASK;
+        break;
+    }
+  }
+
   updateError(control, error) {
     const field = control.parentElement;
     field.classList.toggle('has-error', !!error);
@@ -67,13 +96,17 @@ class CardForm {
 
   onCardNumberInput = (event) => {
     const target = event.target;
-    target.value = formatCardNumber(target.value);
+    const formatted = formatCardNumber(target.value);
+    target.value = formatted;
+
+    this.updateCardType(getCardType(formatted));
     this.tabForward(target);
   };
 
   onCardExpiryDateInput = (event) => {
     const target = event.target;
     target.value = formatExpiryDate(target.value);
+
     this.tabForward(target);
   };
 
@@ -84,9 +117,7 @@ class CardForm {
 
   onBlur = (event) => {
     const target = event.target;
-    if (target.required) {
-      this.validateControl(target);
-    }
+    target.required && this.validateControl(target);
   };
 
   onSubmit = (event) => {

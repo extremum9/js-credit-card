@@ -1,4 +1,4 @@
-import { checkLuhn, getCardType } from './utils.js';
+import { checkLuhn, sanitizeDigits } from './utils.js';
 
 const EMAIL_REGEXP = /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z\d-]+\.[a-z]{2,}$/;
 
@@ -7,14 +7,27 @@ const requiredValidator = (value) => value.trim() !== '';
 const emailValidator = (email) => EMAIL_REGEXP.test(email);
 
 const cardNumberValidator = (number) => {
-  const sanitized = number.replace(/\D/g, '');
-  const type = getCardType(sanitized);
+  const sanitized = sanitizeDigits(number);
+  const cardPatterns = {
+    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+    mastercard: /^5[1-5][0-9]{14}$/,
+    amex: /^3[47][0-9]{13}$/,
+    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/
+  };
 
-  return type === 'unknown' ? false : checkLuhn(sanitized);
+  for (const card of Object.entries(cardPatterns)) {
+    if (!card[1].test(sanitized)) {
+      return false;
+    }
+  }
+
+  return checkLuhn(sanitized);
 };
 
 const expiryDateValidator = (date) => {
-  const [month, year] = date.split('/').map(Number);
+  const sanitized = date.split('/').map(Number);
+  const month = sanitized[0];
+  const year = sanitized[1];
   if (!month || !year || month > 12) {
     return false;
   }
@@ -26,7 +39,7 @@ const expiryDateValidator = (date) => {
   return year > currentYear || (year === currentYear && month >= currentMonth);
 };
 
-const CVVCodeValidator = (cvv) => /^\d{3}$/.test(cvv);
+const CVVCodeValidator = (cvv) => /^\d{3,4}$/.test(cvv);
 
 const validators = {
   required: (message) => ({

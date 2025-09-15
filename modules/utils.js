@@ -2,39 +2,7 @@ export const getRandomInt = (max) => {
   return Math.floor(Math.random() * max + 1);
 };
 
-export const getCardType = (number) => {
-  const cardPatterns = {
-    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-    mastercard: /^5[1-5][0-9]{14}$/,
-    amex: /^3[47][0-9]{13}$/,
-    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/
-  };
-
-  for (const [card, pattern] of Object.entries(cardPatterns)) {
-    if (pattern.test(number)) {
-      return card;
-    }
-  }
-
-  return 'unknown';
-};
-
-export const getCardMaskType = (number) => {
-  const cardPatterns = {
-    visa: /^4/,
-    mastercard: /^5[1-5]/,
-    amex: /^3[47]/,
-    discover: /^6(011|5)/
-  };
-
-  for (const [card, pattern] of Object.entries(cardPatterns)) {
-    if (pattern.test(number)) {
-      return card;
-    }
-  }
-
-  return 'unknown';
-};
+export const sanitizeDigits = (value) => value.replace(/\D/g, '');
 
 export const checkLuhn = (number) => {
   let sum = 0;
@@ -52,11 +20,27 @@ export const checkLuhn = (number) => {
   return sum % 10 === 0;
 };
 
-export const formatCardNumber = (number) => {
-  const sanitized = number.replace(/\D/g, '');
-  const type = getCardMaskType(sanitized);
+export const getCardType = (number) => {
+  const cardPatterns = {
+    visa: /^4/,
+    mastercard: /^5[1-5]/,
+    amex: /^3[47]/,
+    discover: /^6(011|5)/
+  };
 
-  switch (type) {
+  for (const card of Object.entries(cardPatterns)) {
+    if (card[1].test(number)) {
+      return card[0];
+    }
+  }
+
+  return 'unknown';
+};
+
+export const formatCardNumber = (number) => {
+  const sanitized = sanitizeDigits(number);
+
+  switch (getCardType(sanitized)) {
     case 'amex':
       return sanitized
         .slice(0, 15)
@@ -75,12 +59,10 @@ export const formatCardNumber = (number) => {
 };
 
 export const formatExpiryDate = (date) => {
-  const sanitized = date.replace(/\D/g, '').slice(0, 4);
+  const sanitized = sanitizeDigits(date).slice(0, 4);
   return sanitized.length > 2
-    ? sanitized.replace(/(\d{2})(\d{1,2})/, '$1/$2')
+    ? sanitized.replace(/(\d{2})(\d{0,2})/, '$1/$2')
     : sanitized;
 };
 
-export const formatCVVCode = (cvv) => {
-  return cvv.replace(/\D/g, '');
-};
+export const formatCVVCode = (cvv) => sanitizeDigits(cvv).slice(0, 4);
