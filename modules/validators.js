@@ -8,20 +8,18 @@ const emailValidator = (email) => EMAIL_REGEXP.test(email);
 
 const cardNumberValidator = (number) => {
   const sanitized = sanitizeDigits(number);
-  const cardPatterns = {
+  const patterns = {
     visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
     mastercard: /^5[1-5][0-9]{14}$/,
     amex: /^3[47][0-9]{13}$/,
     discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/
   };
 
-  for (const card of Object.entries(cardPatterns)) {
-    if (!card[1].test(sanitized)) {
-      return false;
-    }
-  }
+  const matchesPattern = Object.values(patterns).some((pattern) =>
+    pattern.test(sanitized)
+  );
 
-  return checkLuhn(sanitized);
+  return !matchesPattern ? false : checkLuhn(sanitized);
 };
 
 const expiryDateValidator = (date) => {

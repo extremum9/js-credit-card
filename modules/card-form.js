@@ -57,6 +57,7 @@ class CardForm {
       case 'visa':
       case 'mastercard':
       case 'discover':
+      case 'unknown':
       default:
         this.cardNumberControl.maxLength = CARD_NUMBER_DEFAULT_MASK.length;
         this.cardCVVCodeControl.maxLength = CVV_DEFAULT_MASK.length;
@@ -65,12 +66,14 @@ class CardForm {
     }
   }
 
-  updateError(control, error) {
+  updateError(control, errorMessage) {
     const field = control.parentElement;
-    field.classList.toggle('has-error', !!error);
     const fieldError = field.querySelector(this.selectors.fieldError);
-    fieldError.textContent = error ? error : '';
-    control.setAttribute('aria-invalid', String(!!error));
+    const hasError = !!errorMessage;
+
+    field.classList.toggle('has-error', hasError);
+    fieldError.textContent = errorMessage || '';
+    control.setAttribute('aria-invalid', String(hasError));
   }
 
   validateControl(control) {
@@ -78,15 +81,17 @@ class CardForm {
       return;
     }
 
-    let error;
+    let errorMessage;
     for (const validator of this.validationConfig[control.id]) {
       if (!validator.validate(control.value)) {
-        error = validator.message;
+        errorMessage = validator.message;
         break;
       }
     }
 
-    this.updateError(control, error);
+    this.updateError(control, errorMessage);
+
+    return !errorMessage;
   }
 
   tabForward(control) {
@@ -121,7 +126,25 @@ class CardForm {
   };
 
   onSubmit = (event) => {
-    event.preventDefault();
+    const requiredControls = [...this.form.elements].filter(
+      (control) => control.required
+    );
+    let formValid = true;
+    let firstInvalidControl = null;
+
+    requiredControls.forEach((control) => {
+      if (!this.validateControl(control)) {
+        formValid = false;
+        if (!firstInvalidControl) {
+          firstInvalidControl = control;
+        }
+      }
+    });
+
+    if (!formValid) {
+      event.preventDefault();
+      firstInvalidControl.focus();
+    }
   };
 
   bindEvents() {

@@ -53,6 +53,7 @@ export const formatCardNumber = (number) => {
         .slice(0, 16)
         .replace(/(\d{4})/g, '$1 ')
         .trim();
+    case 'unknown':
     default:
       return sanitized.slice(0, 16);
   }
@@ -60,6 +61,7 @@ export const formatCardNumber = (number) => {
 
 export const formatExpiryDate = (date) => {
   const sanitized = sanitizeDigits(date).slice(0, 4);
+
   return sanitized.length > 2
     ? sanitized.replace(/(\d{2})(\d{0,2})/, '$1/$2')
     : sanitized;
