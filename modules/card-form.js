@@ -12,10 +12,27 @@ const CARD_NUMBER_AMEX_MASK = 'XXXX XXXXXX XXXXX';
 const CVV_DEFAULT_MASK = 'XXX';
 const CVV_AMEX_MASK = 'XXXX';
 
+const HIGHLIGHT_ANIMATION_MS = 300;
+
 class CardForm {
   selectors = {
     form: '.js-form',
-    fieldError: '.js-form-field-error'
+    fieldError: '.js-form-field-error',
+    card: '.js-card',
+    cardHighlighter: '.js-card-highlighter',
+    cardNumber: '.js-card-number',
+    cardHolder: '.js-card-holder',
+    cardExpiryDate: '.js-card-expiry-date'
+  };
+
+  stateClasses = {
+    flip: 'flip',
+    highlight: 'highlight',
+    hasError: 'has-error'
+  };
+
+  stateAttributes = {
+    ariaInvalid: 'aria-invalid'
   };
 
   validationConfig = {
@@ -44,6 +61,16 @@ class CardForm {
     this.cardHolderControl = this.form.cardHolder;
     this.cardExpiryDateControl = this.form.cardExpiryDate;
     this.cardCVVCodeControl = this.form.cardCVVCode;
+    this.card = document.querySelector(this.selectors.card);
+    this.cardHighlighter = document.querySelector(
+      this.selectors.cardHighlighter
+    );
+    this.highlightableElements = {
+      cardNumber: document.querySelector(this.selectors.cardNumber),
+      cardHolder: document.querySelector(this.selectors.cardHolder),
+      cardExpiryDate: document.querySelector(this.selectors.cardExpiryDate)
+    };
+    this.fieldFocused = false;
     this.bindEvents();
   }
 
@@ -71,9 +98,9 @@ class CardForm {
     const fieldError = field.querySelector(this.selectors.fieldError);
     const hasError = !!errorMessage;
 
-    field.classList.toggle('has-error', hasError);
+    field.classList.toggle(this.stateClasses.hasError, hasError);
     fieldError.textContent = errorMessage || '';
-    control.setAttribute('aria-invalid', String(hasError));
+    control.setAttribute(this.stateAttributes.ariaInvalid, String(hasError));
   }
 
   validateControl(control) {
@@ -95,8 +122,32 @@ class CardForm {
   }
 
   tabForward(control) {
-    control.value.length === control.maxLength &&
-      this.form[control.dataset.next]?.focus();
+    if (control.value.length === control.maxLength && control.dataset.next) {
+      this.form[control.dataset.next].focus();
+    }
+  }
+
+  highlight(element) {
+    const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = element;
+
+    this.fieldFocused = true;
+
+    Object.assign(this.cardHighlighter.style, {
+      width: `${offsetWidth}px`,
+      height: `${offsetHeight}px`,
+      translate: `${offsetLeft}px ${offsetTop}px`
+    });
+
+    this.cardHighlighter.classList.add(this.stateClasses.highlight);
+  }
+
+  clearHighlight() {
+    Object.assign(this.cardHighlighter.style, {
+      width: '',
+      height: '',
+      translate: ''
+    });
+    this.cardHighlighter.classList.remove(this.stateClasses.highlight);
   }
 
   onCardNumberInput = (event) => {
@@ -122,7 +173,31 @@ class CardForm {
 
   onBlur = (event) => {
     const target = event.target;
-    target.required && this.validateControl(target);
+    if (target.required) {
+      this.validateControl(target);
+    }
+
+    this.card.classList.remove(this.stateClasses.flip);
+    this.fieldFocused = false;
+
+    setTimeout(() => {
+      if (!this.fieldFocused) {
+        this.clearHighlight();
+      }
+    }, HIGHLIGHT_ANIMATION_MS);
+  };
+
+  onFocus = (event) => {
+    const target = event.target;
+    const highlightableElement = this.highlightableElements[target.id];
+
+    if (highlightableElement) {
+      this.highlight(highlightableElement);
+    }
+
+    if (target === this.cardCVVCodeControl) {
+      this.card.classList.add(this.stateClasses.flip);
+    }
   };
 
   onSubmit = (event) => {
@@ -158,6 +233,7 @@ class CardForm {
     );
     this.cardCVVCodeControl.addEventListener('input', this.onCardCVVCodeInput);
     this.form.addEventListener('blur', this.onBlur, { capture: true });
+    this.form.addEventListener('focus', this.onFocus, { capture: true });
     this.form.addEventListener('submit', this.onSubmit);
   }
 }

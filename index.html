@@ -12,27 +12,36 @@
       <div class="card js-card">
         <div class="card-inner">
           <div class="card-front">
-            <div class="card-head">
-              <img src="images/chip.png" width="60" height="48" alt="Chip" />
-              <img src="images/visa.png" width="85" height="45" alt="Visa" />
-            </div>
-            <div class="card-body">
-              <label class="card-number" for="cardNumber">
-                <div>####</div>
-                <div>####</div>
-                <div>####</div>
-                <div>####</div>
-              </label>
-            </div>
-            <div class="card-tail">
-              <label class="card-tail-item card-holder" for="cardHolder">
-                <div class="card-label">Card Holder</div>
-                <div class="card-value">FULL NAME</div>
-              </label>
-              <label class="card-tail-item" for="cardExpiryDate">
-                <div class="card-label">Expires</div>
-                <div class="card-value">MM/YY</div>
-              </label>
+            <div class="card-highlighter js-card-highlighter"></div>
+            <div class="card-content">
+              <div class="card-head">
+                <img src="images/chip.png" width="60" height="48" alt="Chip" />
+                <img src="images/visa.png" width="85" height="45" alt="Visa" />
+              </div>
+              <div class="card-body">
+                <label class="card-number js-card-number" for="cardNumber">
+                  <div>####</div>
+                  <div>####</div>
+                  <div>####</div>
+                  <div>####</div>
+                </label>
+              </div>
+              <div class="card-tail">
+                <label
+                  class="card-tail-item card-holder js-card-holder"
+                  for="cardHolder"
+                >
+                  <div class="card-label">Card Holder</div>
+                  <div class="card-value">FULL NAME</div>
+                </label>
+                <label
+                  class="card-tail-item js-card-expiry-date"
+                  for="cardExpiryDate"
+                >
+                  <div class="card-label">Expires</div>
+                  <div class="card-value">MM/YY</div>
+                </label>
+              </div>
             </div>
           </div>
 
