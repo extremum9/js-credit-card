@@ -6,11 +6,16 @@ import {
   getCardType
 } from './utils.js';
 
-const CARD_NUMBER_DEFAULT_MASK = 'XXXX XXXX XXXX XXXX';
-const CARD_NUMBER_AMEX_MASK = 'XXXX XXXXXX XXXXX';
-
-const CVV_DEFAULT_MASK = 'XXX';
-const CVV_AMEX_MASK = 'XXXX';
+const CARD_MASKS = {
+  default: {
+    number: 'XXXX XXXX XXXX XXXX',
+    cvv: 'XXX'
+  },
+  amex: {
+    number: 'XXXX XXXXXX XXXXX',
+    cvv: 'XXXX'
+  }
+};
 
 const HIGHLIGHT_ANIMATION_MS = 300;
 
@@ -76,13 +81,11 @@ class CardForm {
   }
 
   updateCardType(type) {
-    const cardNumberMask =
-      type === 'amex' ? CARD_NUMBER_AMEX_MASK : CARD_NUMBER_DEFAULT_MASK;
-    const cardCVVMask = type === 'amex' ? CVV_AMEX_MASK : CVV_DEFAULT_MASK;
+    const masks = type === 'amex' ? CARD_MASKS.amex : CARD_MASKS.default;
 
-    this.cardNumberControl.maxLength = cardNumberMask.length;
-    this.cardCVVCodeControl.maxLength = cardCVVMask.length;
-    this.cardCVVCodeControl.placeholder = cardCVVMask;
+    this.cardNumberControl.maxLength = masks.number.length;
+    this.cardCVVCodeControl.maxLength = masks.cvv.length;
+    this.cardCVVCodeControl.placeholder = masks.cvv;
   }
 
   updateError(control, errorMessage) {
@@ -96,21 +99,18 @@ class CardForm {
   }
 
   validateControl(control) {
-    if (!this.validationConfig[control.id]) {
-      return;
+    const validators = this.validationConfig[control.id];
+    if (!validators) {
+      return true;
     }
 
-    let errorMessage;
-    for (const validator of this.validationConfig[control.id]) {
-      if (!validator.validate(control.value)) {
-        errorMessage = validator.message;
-        break;
-      }
-    }
+    const error = validators.find(
+      (validator) => !validator.validate(control.value)
+    );
 
-    this.updateError(control, errorMessage);
+    this.updateError(control, error?.message);
 
-    return !errorMessage;
+    return !error;
   }
 
   tabForward(control) {
