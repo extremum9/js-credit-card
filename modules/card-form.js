@@ -76,22 +76,13 @@ class CardForm {
   }
 
   updateCardType(type) {
-    switch (type) {
-      case 'amex':
-        this.cardNumberControl.maxLength = CARD_NUMBER_AMEX_MASK.length;
-        this.cardCVVCodeControl.maxLength = CVV_AMEX_MASK.length;
-        this.cardCVVCodeControl.placeholder = CVV_AMEX_MASK;
-        break;
-      case 'visa':
-      case 'mastercard':
-      case 'discover':
-      case 'unknown':
-      default:
-        this.cardNumberControl.maxLength = CARD_NUMBER_DEFAULT_MASK.length;
-        this.cardCVVCodeControl.maxLength = CVV_DEFAULT_MASK.length;
-        this.cardCVVCodeControl.placeholder = CVV_DEFAULT_MASK;
-        break;
-    }
+    const cardNumberMask =
+      type === 'amex' ? CARD_NUMBER_AMEX_MASK : CARD_NUMBER_DEFAULT_MASK;
+    const cardCVVMask = type === 'amex' ? CVV_AMEX_MASK : CVV_DEFAULT_MASK;
+
+    this.cardNumberControl.maxLength = cardNumberMask.length;
+    this.cardCVVCodeControl.maxLength = cardCVVMask.length;
+    this.cardCVVCodeControl.placeholder = cardCVVMask;
   }
 
   updateError(control, errorMessage) {
