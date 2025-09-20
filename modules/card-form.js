@@ -199,21 +199,13 @@ class CardForm {
     const requiredControls = [...this.form.elements].filter(
       (control) => control.required
     );
-    let formValid = true;
-    let firstInvalidControl = null;
+    const invalidControls = requiredControls.filter(
+      (control) => !this.validateControl(control)
+    );
 
-    requiredControls.forEach((control) => {
-      if (!this.validateControl(control)) {
-        formValid = false;
-        if (!firstInvalidControl) {
-          firstInvalidControl = control;
-        }
-      }
-    });
-
-    if (!formValid) {
+    if (invalidControls.length) {
       event.preventDefault();
-      firstInvalidControl.focus();
+      invalidControls[0].focus();
     }
   };
 
