@@ -61,6 +61,9 @@ export const formatCardNumber = (number) => {
 
 export const formatExpiryDate = (date) => {
   const sanitized = sanitizeDigits(date).slice(0, 4);
+  if (sanitized.length === 1 && +sanitized > 1) {
+    return `0${sanitized}`;
+  }
 
   return sanitized.length > 2
     ? sanitized.replace(/(\d{2})(\d{0,2})/, '$1/$2')
