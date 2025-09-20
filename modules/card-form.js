@@ -65,12 +65,13 @@ class CardForm {
     this.cardHighlighter = document.querySelector(
       this.selectors.cardHighlighter
     );
-    this.highlightableElements = {
+    this.cardHighlightElements = {
       cardNumber: document.querySelector(this.selectors.cardNumber),
       cardHolder: document.querySelector(this.selectors.cardHolder),
       cardExpiryDate: document.querySelector(this.selectors.cardExpiryDate)
     };
     this.fieldFocused = false;
+    this.highlightTimeout = null;
     this.bindEvents();
   }
 
@@ -130,8 +131,6 @@ class CardForm {
   highlight(element) {
     const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = element;
 
-    this.fieldFocused = true;
-
     Object.assign(this.cardHighlighter.style, {
       width: `${offsetWidth}px`,
       height: `${offsetHeight}px`,
@@ -172,15 +171,19 @@ class CardForm {
   };
 
   onBlur = (event) => {
+    this.fieldFocused = false;
+
+    if (this.highlightTimeout) {
+      clearTimeout(this.highlightTimeout);
+    }
+
     const target = event.target;
     if (target.required) {
       this.validateControl(target);
     }
 
     this.card.classList.remove(this.stateClasses.flip);
-    this.fieldFocused = false;
-
-    setTimeout(() => {
+    this.highlightTimeout = setTimeout(() => {
       if (!this.fieldFocused) {
         this.clearHighlight();
       }
@@ -188,11 +191,12 @@ class CardForm {
   };
 
   onFocus = (event) => {
-    const target = event.target;
-    const highlightableElement = this.highlightableElements[target.id];
+    this.fieldFocused = true;
 
-    if (highlightableElement) {
-      this.highlight(highlightableElement);
+    const target = event.target;
+    const highlightElement = this.cardHighlightElements[target.id];
+    if (highlightElement) {
+      this.highlight(highlightElement);
     }
 
     if (target === this.cardCVVCodeControl) {
