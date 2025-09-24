@@ -27,7 +27,8 @@ class CardForm {
     cardHighlighter: '.js-card-highlighter',
     cardNumber: '.js-card-number',
     cardHolder: '.js-card-holder',
-    cardExpiryDate: '.js-card-expiry-date'
+    cardExpiryDate: '.js-card-expiry-date',
+    cardCVV: '.js-card-cvv'
   };
 
   stateClasses = {
@@ -70,10 +71,16 @@ class CardForm {
     this.cardHighlighter = document.querySelector(
       this.selectors.cardHighlighter
     );
+    this.cardNumberOutput = document.querySelector(this.selectors.cardNumber);
+    this.cardHolderOutput = document.querySelector(this.selectors.cardHolder);
+    this.cardExpiryDateOutput = document.querySelector(
+      this.selectors.cardExpiryDate
+    );
+    this.cardCVVOutput = document.querySelector(this.selectors.cardCVV);
     this.cardHighlightElements = {
-      cardNumber: document.querySelector(this.selectors.cardNumber),
-      cardHolder: document.querySelector(this.selectors.cardHolder),
-      cardExpiryDate: document.querySelector(this.selectors.cardExpiryDate)
+      cardNumber: this.cardNumberOutput,
+      cardHolder: this.cardHolderOutput,
+      cardExpiryDate: this.cardExpiryDateOutput
     };
     this.fieldFocused = false;
     this.highlightTimeout = null;
@@ -85,7 +92,6 @@ class CardForm {
 
     this.cardNumberControl.maxLength = masks.number.length;
     this.cardCVVCodeControl.maxLength = masks.cvv.length;
-    this.cardCVVCodeControl.placeholder = masks.cvv;
   }
 
   updateError(control, errorMessage) {
@@ -158,7 +164,10 @@ class CardForm {
 
   onCardCVVCodeInput = (event) => {
     const target = event.target;
-    target.value = formatCVVCode(target.value);
+    const cvv = formatCVVCode(target.value);
+    target.value = cvv;
+
+    this.cardCVVOutput.textContent = '*'.repeat(cvv.length);
   };
 
   onBlur = (event) => {

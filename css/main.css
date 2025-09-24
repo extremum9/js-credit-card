@@ -15,6 +15,27 @@ body {
   max-width: 35.625rem;
 }
 
+.slide-fade-up-enter-active,
+.slide-fade-up-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.slide-fade-up-leave-active {
+  position: absolute;
+}
+
+.slide-fade-up-enter-from,
+.slide-fade-up-leave-to {
+  opacity: 0;
+  translate: 0 -0.938rem;
+}
+
+.slide-fade-up-enter-to,
+.slide-fade-up-leave-from {
+  opacity: 1;
+  translate: 0;
+}
+
 .card {
   max-width: 26.875rem;
   height: 16.875rem;
@@ -115,15 +136,22 @@ body {
 
 .card-number {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  column-gap: 1.875rem;
   padding: 0.625rem 0.938rem;
   font-size: 1.563rem;
   font-weight: 500;
   line-height: 1;
   color: #ffffff;
   cursor: pointer;
+}
+
+.card-number-item {
+  display: inline-block;
+  width: 1rem;
+}
+
+.card-number-item-blank {
+  width: 2rem;
 }
 
 .card-body {
