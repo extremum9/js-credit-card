@@ -17,7 +17,11 @@ body {
 
 .slide-fade-up-enter-active,
 .slide-fade-up-leave-active {
-  transition: all 0.2s ease-in-out;
+  transition: translate 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.slide-fade-up-enter-active {
+  transition-delay: 0.1s;
 }
 
 .slide-fade-up-leave-active {
@@ -27,13 +31,20 @@ body {
 .slide-fade-up-enter-from,
 .slide-fade-up-leave-to {
   opacity: 0;
-  translate: 0 -0.938rem;
 }
 
 .slide-fade-up-enter-to,
 .slide-fade-up-leave-from {
   opacity: 1;
   translate: 0;
+}
+
+.slide-fade-up-enter-from {
+  translate: 0 0.938rem;
+}
+
+.slide-fade-up-leave-to {
+  translate: 0 -0.938rem;
 }
 
 .card {
@@ -146,12 +157,13 @@ body {
 }
 
 .card-number-item {
-  display: inline-block;
-  width: 1rem;
+  span {
+    display: inline-block;
+  }
 }
 
 .card-number-item-blank {
-  width: 2rem;
+  width: 2.5rem;
 }
 
 .card-body {
