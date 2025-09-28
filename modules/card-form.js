@@ -29,6 +29,9 @@ const CARD_MASKS = {
   }
 };
 
+const CARD_HOLDER_PLACEHOLDER = 'Full Name';
+const CARD_EXPIRY_DATE_PLACEHOLDER = 'MM/YY';
+
 const HIGHLIGHT_ANIMATION_MS = 300;
 
 class CardForm {
@@ -41,7 +44,9 @@ class CardForm {
     cardNumber: '.js-card-number',
     cardNumberItem: '.js-card-number-item',
     cardHolder: '.js-card-holder',
+    cardHolderValue: '.js-card-holder-value',
     cardExpiryDate: '.js-card-expiry-date',
+    cardExpiryDateValue: '.js-card-expiry-date-value',
     cardCVV: '.js-card-cvv'
   };
 
@@ -94,8 +99,14 @@ class CardForm {
       this.selectors.cardNumberItem
     );
     this.cardHolderOutput = this.card.querySelector(this.selectors.cardHolder);
+    this.cardHolderOutputValue = this.cardHolderOutput.querySelector(
+      this.selectors.cardHolderValue
+    );
     this.cardExpiryDateOutput = this.card.querySelector(
       this.selectors.cardExpiryDate
+    );
+    this.cardExpiryDateOutputValue = this.cardExpiryDateOutput.querySelector(
+      this.selectors.cardExpiryDateValue
     );
     this.cardCVVOutput = this.card.querySelector(this.selectors.cardCVV);
 
@@ -214,9 +225,25 @@ class CardForm {
     this.tabForward(target);
   };
 
+  onCardHolderInput = (event) => {
+    const target = event.target;
+    const cardHolder = target.value;
+
+    this.cardHolderOutputValue.textContent = cardHolder.length
+      ? cardHolder
+      : CARD_HOLDER_PLACEHOLDER;
+
+    this.tabForward(target);
+  };
+
   onCardExpiryDateInput = (event) => {
     const target = event.target;
-    target.value = formatExpiryDate(target.value);
+    const expiryDate = formatExpiryDate(target.value);
+    target.value = expiryDate;
+
+    this.cardExpiryDateOutputValue.textContent = expiryDate.length
+      ? expiryDate
+      : CARD_EXPIRY_DATE_PLACEHOLDER;
 
     this.tabForward(target);
   };
@@ -281,9 +308,7 @@ class CardForm {
 
   bindEvents() {
     this.cardNumberControl.addEventListener('input', this.onCardNumberInput);
-    this.cardHolderControl.addEventListener('input', (event) =>
-      this.tabForward(event.target)
-    );
+    this.cardHolderControl.addEventListener('input', this.onCardHolderInput);
     this.cardExpiryDateControl.addEventListener(
       'input',
       this.onCardExpiryDateInput
