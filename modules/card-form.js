@@ -7,41 +7,47 @@ import {
 } from './utils.js';
 
 const CARD_MASKS = {
-  default: {
+  visa: {
+    number: 'XXXX XXXX XXXX XXXX',
+    cvv: 'XXX'
+  },
+  mastercard: {
     number: 'XXXX XXXX XXXX XXXX',
     cvv: 'XXX'
   },
   amex: {
     number: 'XXXX XXXXXX XXXXX',
     cvv: 'XXXX'
+  },
+  discover: {
+    number: 'XXXX XXXX XXXX XXXX',
+    cvv: 'XXX'
+  },
+  unknown: {
+    number: 'XXXXXXXXXXXXXXXX',
+    cvv: 'XXX'
   }
 };
 
 const HIGHLIGHT_ANIMATION_MS = 300;
-const SLIDE_FADE_UP_ANIMATION_MS = 300;
 
 class CardForm {
   selectors = {
-    form: '.js-form',
-    fieldError: '.js-form-field-error',
     card: '.js-card',
     cardHighlighter: '.js-card-highlighter',
     cardNumber: '.js-card-number',
+    cardNumberItem: '.js-card-number-item',
     cardHolder: '.js-card-holder',
     cardExpiryDate: '.js-card-expiry-date',
-    cardCVV: '.js-card-cvv'
+    cardCVV: '.js-card-cvv',
+    form: '.js-form',
+    fieldError: '.js-form-field-error'
   };
 
   stateClasses = {
     flip: 'flip',
     highlight: 'highlight',
-    hasError: 'has-error',
-    slideFadeUpEnterActive: 'slide-fade-up-enter-active',
-    slideFadeUpLeaveActive: 'slide-fade-up-leave-active',
-    slideFadeUpEnterFrom: 'slide-fade-up-enter-from',
-    slideFadeUpLeaveFrom: 'slide-fade-up-leave-from',
-    slideFadeUpEnterTo: 'slide-fade-up-enter-to',
-    slideFadeUpLeaveTo: 'slide-fade-up-leave-to'
+    hasError: 'has-error'
   };
 
   stateAttributes = {
@@ -89,17 +95,39 @@ class CardForm {
       cardHolder: this.cardHolderOutput,
       cardExpiryDate: this.cardExpiryDateOutput
     };
-    this.cardNumberItems = this.cardNumberOutput.querySelectorAll('div');
+    this.cardNumberItems = this.cardNumberOutput.querySelectorAll(
+      this.selectors.cardNumberItem
+    );
     this.fieldFocused = false;
     this.highlightTimeout = null;
+    this.currentCardType = 'visa';
     this.bindEvents();
   }
 
-  updateCardType(type) {
-    const masks = type === 'amex' ? CARD_MASKS.amex : CARD_MASKS.default;
+  updateCardType(cardType) {
+    this.currentCardType = cardType;
 
-    this.cardNumberControl.maxLength = masks.number.length;
-    this.cardCVVCodeControl.maxLength = masks.cvv.length;
+    const mask = CARD_MASKS[cardType];
+
+    this.cardNumberControl.maxLength = mask.number.length;
+    this.cardCVVCodeControl.maxLength = mask.cvv.length;
+
+    this.cardNumberOutput.innerHTML = Array.prototype.reduce.call(
+      mask.number,
+      (template, char) => {
+        if (char === ' ') {
+          template += `<div class="card-number-item card-number-item-blank js-card-number-item"></div>`;
+        } else {
+          template += `<div class="card-number-item js-card-number-item">#</div>`;
+        }
+        return template;
+      },
+      ''
+    );
+
+    this.cardNumberItems = this.cardNumberOutput.querySelectorAll(
+      this.selectors.cardNumberItem
+    );
   }
 
   updateError(control, errorMessage) {
@@ -141,7 +169,6 @@ class CardForm {
       height: `${offsetHeight}px`,
       translate: `${offsetLeft}px ${offsetTop}px`
     });
-
     this.cardHighlighter.classList.add(this.stateClasses.highlight);
   }
 
@@ -154,59 +181,24 @@ class CardForm {
     this.cardHighlighter.classList.remove(this.stateClasses.highlight);
   }
 
-  animateCardNumber(cardNumber) {
-    const {
-      slideFadeUpEnterActive,
-      slideFadeUpLeaveActive,
-      slideFadeUpEnterFrom,
-      slideFadeUpLeaveFrom,
-      slideFadeUpEnterTo,
-      slideFadeUpLeaveTo
-    } = this.stateClasses;
-
-    this.cardNumberItems.forEach((item, index) => {
-      const currentChild = item.children[0];
-      const currentChar = currentChild.textContent.trim();
-      const newChar = cardNumber[index]?.trim() ?? '#';
-
-      if (
-        !currentChar ||
-        currentChar === newChar ||
-        currentChild.classList.contains(slideFadeUpLeaveActive)
-      ) {
-        return;
-      }
-
-      const newChild = document.createElement('span');
-      newChild.className = `${slideFadeUpEnterActive} ${slideFadeUpEnterFrom}`;
-      newChild.textContent = newChar;
-
-      currentChild.classList.add(slideFadeUpLeaveActive, slideFadeUpLeaveFrom);
-      currentChild.after(newChild);
-
-      requestAnimationFrame(() => {
-        currentChild.classList.remove(slideFadeUpLeaveFrom);
-        currentChild.classList.add(slideFadeUpLeaveTo);
-
-        newChild.classList.remove(slideFadeUpEnterFrom);
-        newChild.classList.add(slideFadeUpEnterTo);
-
-        setTimeout(() => {
-          currentChild.remove();
-          newChild.className = '';
-        }, SLIDE_FADE_UP_ANIMATION_MS);
-      });
-    });
-  }
-
   onCardNumberInput = (event) => {
     const target = event.target;
     const cardNumber = formatCardNumber(target.value);
     target.value = cardNumber;
 
-    this.animateCardNumber(cardNumber);
+    const cardType = getCardType(cardNumber);
+    if (this.currentCardType !== cardType && cardNumber.length) {
+      this.updateCardType(cardType);
+    }
 
-    this.updateCardType(getCardType(cardNumber));
+    this.cardNumberItems.forEach((item, index) => {
+      const oldChar = item.textContent.trim();
+      const newChar = cardNumber[index]?.trim() ?? '#';
+      if (oldChar && oldChar !== newChar) {
+        item.textContent = newChar;
+      }
+    });
+
     this.tabForward(target);
   };
 

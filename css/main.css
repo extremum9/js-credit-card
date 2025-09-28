@@ -15,38 +15,6 @@ body {
   max-width: 35.625rem;
 }
 
-.slide-fade-up-enter-active,
-.slide-fade-up-leave-active {
-  transition: translate 0.2s ease-in-out, opacity 0.2s ease-in-out;
-}
-
-.slide-fade-up-enter-active {
-  transition-delay: 0.1s;
-}
-
-.slide-fade-up-leave-active {
-  position: absolute;
-}
-
-.slide-fade-up-enter-from,
-.slide-fade-up-leave-to {
-  opacity: 0;
-}
-
-.slide-fade-up-enter-to,
-.slide-fade-up-leave-from {
-  opacity: 1;
-  translate: 0;
-}
-
-.slide-fade-up-enter-from {
-  translate: 0 0.938rem;
-}
-
-.slide-fade-up-leave-to {
-  translate: 0 -0.938rem;
-}
-
 .card {
   max-width: 26.875rem;
   height: 16.875rem;
@@ -154,12 +122,6 @@ body {
   line-height: 1;
   color: #ffffff;
   cursor: pointer;
-}
-
-.card-number-item {
-  span {
-    display: inline-block;
-  }
 }
 
 .card-number-item-blank {
