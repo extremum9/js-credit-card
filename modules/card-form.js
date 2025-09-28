@@ -33,15 +33,16 @@ const HIGHLIGHT_ANIMATION_MS = 300;
 
 class CardForm {
   selectors = {
+    form: '.js-form',
+    fieldError: '.js-form-field-error',
     card: '.js-card',
     cardHighlighter: '.js-card-highlighter',
+    cardTypeImage: '.js-card-type-image',
     cardNumber: '.js-card-number',
     cardNumberItem: '.js-card-number-item',
     cardHolder: '.js-card-holder',
     cardExpiryDate: '.js-card-expiry-date',
-    cardCVV: '.js-card-cvv',
-    form: '.js-form',
-    fieldError: '.js-form-field-error'
+    cardCVV: '.js-card-cvv'
   };
 
   stateClasses = {
@@ -80,24 +81,30 @@ class CardForm {
     this.cardHolderControl = this.form.cardHolder;
     this.cardExpiryDateControl = this.form.cardExpiryDate;
     this.cardCVVCodeControl = this.form.cardCVVCode;
+
     this.card = document.querySelector(this.selectors.card);
-    this.cardHighlighter = document.querySelector(
+    this.cardHighlighter = this.card.querySelector(
       this.selectors.cardHighlighter
     );
-    this.cardNumberOutput = document.querySelector(this.selectors.cardNumber);
-    this.cardHolderOutput = document.querySelector(this.selectors.cardHolder);
-    this.cardExpiryDateOutput = document.querySelector(
+    this.cardTypeImageOutput = this.card.querySelector(
+      this.selectors.cardTypeImage
+    );
+    this.cardNumberOutput = this.card.querySelector(this.selectors.cardNumber);
+    this.cardNumberItems = this.cardNumberOutput.querySelectorAll(
+      this.selectors.cardNumberItem
+    );
+    this.cardHolderOutput = this.card.querySelector(this.selectors.cardHolder);
+    this.cardExpiryDateOutput = this.card.querySelector(
       this.selectors.cardExpiryDate
     );
-    this.cardCVVOutput = document.querySelector(this.selectors.cardCVV);
+    this.cardCVVOutput = this.card.querySelector(this.selectors.cardCVV);
+
     this.cardHighlightElements = {
       cardNumber: this.cardNumberOutput,
       cardHolder: this.cardHolderOutput,
       cardExpiryDate: this.cardExpiryDateOutput
     };
-    this.cardNumberItems = this.cardNumberOutput.querySelectorAll(
-      this.selectors.cardNumberItem
-    );
+
     this.fieldFocused = false;
     this.highlightTimeout = null;
     this.currentCardType = 'visa';
@@ -111,6 +118,9 @@ class CardForm {
 
     this.cardNumberControl.maxLength = mask.number.length;
     this.cardCVVCodeControl.maxLength = mask.cvv.length;
+
+    this.cardTypeImageOutput.src = `images/${cardType}.png`;
+    this.cardTypeImageOutput.setAttribute('alt', cardType);
 
     this.cardNumberOutput.innerHTML = Array.prototype.reduce.call(
       mask.number,
@@ -169,6 +179,7 @@ class CardForm {
       height: `${offsetHeight}px`,
       translate: `${offsetLeft}px ${offsetTop}px`
     });
+
     this.cardHighlighter.classList.add(this.stateClasses.highlight);
   }
 
@@ -178,6 +189,7 @@ class CardForm {
       height: '',
       translate: ''
     });
+
     this.cardHighlighter.classList.remove(this.stateClasses.highlight);
   }
 
