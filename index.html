@@ -24,7 +24,7 @@
                 />
                 <div class="card-type">
                   <img
-                    class="js-card-type-image"
+                    class="js-card-type-image-output"
                     src="images/visa.png"
                     width="85"
                     height="45"
@@ -33,7 +33,10 @@
                 </div>
               </div>
               <div class="card-body">
-                <label class="card-number js-card-number" for="cardNumber">
+                <label
+                  class="card-number js-card-number-container"
+                  for="cardNumber"
+                >
                   <div class="card-number-item js-card-number-item">#</div>
                   <div class="card-number-item js-card-number-item">#</div>
                   <div class="card-number-item js-card-number-item">#</div>
@@ -63,18 +66,18 @@
               </div>
               <div class="card-tail">
                 <label
-                  class="card-tail-item card-holder js-card-holder"
+                  class="card-tail-item card-holder js-card-holder-container"
                   for="cardHolder"
                 >
                   <div class="card-label">Card Holder</div>
-                  <div class="card-value js-card-holder-value">FULL NAME</div>
+                  <div class="card-value js-card-holder-output">FULL NAME</div>
                 </label>
                 <label
-                  class="card-tail-item js-card-expiry-date"
+                  class="card-tail-item js-card-expiry-date-container"
                   for="cardExpiryDate"
                 >
                   <div class="card-label">Expires</div>
-                  <div class="card-value js-card-expiry-date-value">MM/YY</div>
+                  <div class="card-value js-card-expiry-date-output">MM/YY</div>
                 </label>
               </div>
             </div>
@@ -85,11 +88,11 @@
             <div class="card-cvv">
               <div class="card-cvv-label">CVV</div>
               <div class="card-cvv-strip">
-                <span class="js-card-cvv"></span>
+                <span class="js-card-cvv-output"></span>
               </div>
               <div class="card-type">
                 <img
-                  class="js-card-type-image"
+                  class="js-card-type-image-output"
                   src="images/visa.png"
                   width="85"
                   height="45"

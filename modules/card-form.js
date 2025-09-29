@@ -39,15 +39,15 @@ class CardForm {
     form: '.js-form',
     fieldError: '.js-form-field-error',
     card: '.js-card',
-    cardHighlighter: '.js-card-highlighter',
-    cardTypeImage: '.js-card-type-image',
-    cardNumber: '.js-card-number',
+    cardTypeImageOutput: '.js-card-type-image-output',
+    cardNumberContainer: '.js-card-number-container',
     cardNumberItem: '.js-card-number-item',
-    cardHolder: '.js-card-holder',
-    cardHolderValue: '.js-card-holder-value',
-    cardExpiryDate: '.js-card-expiry-date',
-    cardExpiryDateValue: '.js-card-expiry-date-value',
-    cardCVV: '.js-card-cvv'
+    cardHolderContainer: '.js-card-holder-container',
+    cardHolderOutput: '.js-card-holder-output',
+    cardExpiryDateContainer: '.js-card-expiry-date-container',
+    cardExpiryDateOutput: '.js-card-expiry-date-output',
+    cardCVVOutput: '.js-card-cvv-output',
+    cardHighlighter: '.js-card-highlighter'
   };
 
   stateClasses = {
@@ -88,32 +88,36 @@ class CardForm {
     this.cardCVVCodeControl = this.form.cardCVVCode;
 
     this.card = document.querySelector(this.selectors.card);
+    this.cardTypeImageOutputs = this.card.querySelectorAll(
+      this.selectors.cardTypeImageOutput
+    );
+    this.cardNumberContainer = this.card.querySelector(
+      this.selectors.cardNumberContainer
+    );
+    this.cardNumberItems = this.cardNumberContainer.querySelectorAll(
+      this.selectors.cardNumberItem
+    );
+    this.cardHolderContainer = this.card.querySelector(
+      this.selectors.cardHolderContainer
+    );
+    this.cardHolderOutput = this.cardHolderContainer.querySelector(
+      this.selectors.cardHolderOutput
+    );
+    this.cardExpiryDateContainer = this.card.querySelector(
+      this.selectors.cardExpiryDateContainer
+    );
+    this.cardExpiryDateOutput = this.cardExpiryDateContainer.querySelector(
+      this.selectors.cardExpiryDateOutput
+    );
+    this.cardCVVOutput = this.card.querySelector(this.selectors.cardCVVOutput);
+
     this.cardHighlighter = this.card.querySelector(
       this.selectors.cardHighlighter
     );
-    this.cardTypeImageOutputs = this.card.querySelectorAll(
-      this.selectors.cardTypeImage
-    );
-    this.cardNumberOutput = this.card.querySelector(this.selectors.cardNumber);
-    this.cardNumberItems = this.cardNumberOutput.querySelectorAll(
-      this.selectors.cardNumberItem
-    );
-    this.cardHolderOutput = this.card.querySelector(this.selectors.cardHolder);
-    this.cardHolderOutputValue = this.cardHolderOutput.querySelector(
-      this.selectors.cardHolderValue
-    );
-    this.cardExpiryDateOutput = this.card.querySelector(
-      this.selectors.cardExpiryDate
-    );
-    this.cardExpiryDateOutputValue = this.cardExpiryDateOutput.querySelector(
-      this.selectors.cardExpiryDateValue
-    );
-    this.cardCVVOutput = this.card.querySelector(this.selectors.cardCVV);
-
     this.cardHighlightElements = {
-      cardNumber: this.cardNumberOutput,
-      cardHolder: this.cardHolderOutput,
-      cardExpiryDate: this.cardExpiryDateOutput
+      cardNumber: this.cardNumberContainer,
+      cardHolder: this.cardHolderContainer,
+      cardExpiryDate: this.cardExpiryDateContainer
     };
 
     this.fieldFocused = false;
@@ -125,10 +129,11 @@ class CardForm {
   updateCardType(cardType) {
     this.currentCardType = cardType;
 
-    const mask = CARD_MASKS[cardType];
+    const { number: maskNumber, cvv: maskCVV } = CARD_MASKS[cardType];
 
-    this.cardNumberControl.maxLength = mask.number.length;
-    this.cardCVVCodeControl.maxLength = mask.cvv.length;
+    this.cardNumberControl.maxLength = maskNumber.length;
+    this.cardCVVCodeControl.maxLength = maskCVV.length;
+    this.cardCVVCodeControl.placeholder = maskCVV;
 
     this.cardTypeImageOutputs.forEach((cardTypeImage) => {
       cardTypeImage.src = `images/${cardType}.png`;
@@ -138,8 +143,8 @@ class CardForm {
       );
     });
 
-    this.cardNumberOutput.innerHTML = Array.prototype.reduce.call(
-      mask.number,
+    this.cardNumberContainer.innerHTML = Array.prototype.reduce.call(
+      maskNumber,
       (template, char) => {
         if (char === ' ') {
           template += `<div class="card-number-item card-number-item-blank js-card-number-item"></div>`;
@@ -151,7 +156,7 @@ class CardForm {
       ''
     );
 
-    this.cardNumberItems = this.cardNumberOutput.querySelectorAll(
+    this.cardNumberItems = this.cardNumberContainer.querySelectorAll(
       this.selectors.cardNumberItem
     );
   }
@@ -234,7 +239,7 @@ class CardForm {
     const target = event.target;
     const cardHolder = target.value;
 
-    this.cardHolderOutputValue.textContent = cardHolder.length
+    this.cardHolderOutput.textContent = cardHolder.length
       ? cardHolder
       : CARD_HOLDER_PLACEHOLDER;
 
@@ -246,7 +251,7 @@ class CardForm {
     const expiryDate = formatExpiryDate(target.value);
     target.value = expiryDate;
 
-    this.cardExpiryDateOutputValue.textContent = expiryDate.length
+    this.cardExpiryDateOutput.textContent = expiryDate.length
       ? expiryDate
       : CARD_EXPIRY_DATE_PLACEHOLDER;
 
