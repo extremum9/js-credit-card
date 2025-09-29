@@ -91,7 +91,7 @@ class CardForm {
     this.cardHighlighter = this.card.querySelector(
       this.selectors.cardHighlighter
     );
-    this.cardTypeImageOutput = this.card.querySelector(
+    this.cardTypeImageOutputs = this.card.querySelectorAll(
       this.selectors.cardTypeImage
     );
     this.cardNumberOutput = this.card.querySelector(this.selectors.cardNumber);
@@ -130,8 +130,13 @@ class CardForm {
     this.cardNumberControl.maxLength = mask.number.length;
     this.cardCVVCodeControl.maxLength = mask.cvv.length;
 
-    this.cardTypeImageOutput.src = `images/${cardType}.png`;
-    this.cardTypeImageOutput.setAttribute('alt', cardType);
+    this.cardTypeImageOutputs.forEach((cardTypeImage) => {
+      cardTypeImage.src = `images/${cardType}.png`;
+      cardTypeImage.setAttribute(
+        'alt',
+        cardType === 'unknown' ? 'unknown card network' : cardType
+      );
+    });
 
     this.cardNumberOutput.innerHTML = Array.prototype.reduce.call(
       mask.number,
