@@ -20,6 +20,14 @@ body {
   background-color: var(--color-background);
 }
 
+.disclaimer {
+  padding: 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-error);
+}
+
 .container {
   width: 100%;
   max-width: 36.875rem;

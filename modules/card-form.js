@@ -129,11 +129,11 @@ class CardForm {
   updateCardType(cardType) {
     this.currentCardType = cardType;
 
-    const { number: maskNumber, cvv: maskCVV } = CARD_MASKS[cardType];
+    const { number: numberMask, cvv: cvvMask } = CARD_MASKS[cardType];
 
-    this.cardNumberControl.maxLength = maskNumber.length;
-    this.cardCVVCodeControl.maxLength = maskCVV.length;
-    this.cardCVVCodeControl.placeholder = maskCVV;
+    this.cardNumberControl.maxLength = numberMask.length;
+    this.cardCVVCodeControl.maxLength = cvvMask.length;
+    this.cardCVVCodeControl.placeholder = cvvMask;
 
     this.cardTypeImageOutputs.forEach((cardTypeImage) => {
       cardTypeImage.src = `images/${cardType}.png`;
@@ -144,7 +144,7 @@ class CardForm {
     });
 
     this.cardNumberContainer.innerHTML = Array.prototype.reduce.call(
-      maskNumber,
+      numberMask,
       (template, char) => {
         if (char === ' ') {
           template += `<div class="card-number-item card-number-item-blank js-card-number-item"></div>`;
@@ -212,6 +212,13 @@ class CardForm {
     });
 
     this.cardHighlighter.classList.remove(this.stateClasses.highlight);
+  }
+
+  clearCard() {
+    this.updateCardType('visa');
+    this.cardHolderOutput.textContent = CARD_HOLDER_PLACEHOLDER;
+    this.cardExpiryDateOutput.textContent = CARD_EXPIRY_DATE_PLACEHOLDER;
+    this.cardCVVOutput.textContent = '';
   }
 
   onCardNumberInput = (event) => {
@@ -303,6 +310,8 @@ class CardForm {
   };
 
   onSubmit = (event) => {
+    event.preventDefault();
+
     const requiredControls = [...this.form.elements].filter(
       (control) => control.required
     );
@@ -311,8 +320,10 @@ class CardForm {
     );
 
     if (invalidControls.length) {
-      event.preventDefault();
       invalidControls[0].focus();
+    } else {
+      this.form.reset();
+      this.clearCard();
     }
   };
 
