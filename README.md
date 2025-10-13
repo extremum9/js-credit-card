@@ -1,4 +1,4 @@
-# Credit Card Form JS
+# js-credit-card
 
 A simple and responsive credit card form in JavaScript with validation, automatic card type detection, interactive card preview and more. Inspired by [muhammed/interactive-card](https://github.com/muhammed/interactive-card).
 
@@ -8,7 +8,7 @@ THIS IS A PERSONAL EDUCATIONAL PROJECT. The creator of this project is NOT affil
 
 ## Demo
 
-You can check out a live demo [here](https://denyschr.github.io/credit-card-form-js/).
+You can check out a live demo [here](https://js-credit-card.netlify.app/).
 
 ## Screenshots
 
