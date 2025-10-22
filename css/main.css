@@ -206,9 +206,6 @@ body {
 .card-cvc {
   padding: 0.938rem;
   text-align: right;
-  .card-type img {
-    margin-inline-start: auto;
-  }
 }
 
 .card-cvc-label {

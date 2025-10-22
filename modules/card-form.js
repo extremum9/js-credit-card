@@ -24,7 +24,7 @@ const CARD_MASKS = {
     cvc: 'XXX'
   },
   unknown: {
-    number: 'XXXXXXXXXXXXXXXX',
+    number: 'XXXX XXXX XXXX XXXX',
     cvc: 'XXX'
   }
 };
@@ -88,7 +88,7 @@ class CardForm {
     this.cardCvcControl = this.form.cardCvc;
 
     this.card = document.querySelector(this.selectors.card);
-    this.cardTypeImageOutputs = this.card.querySelectorAll(
+    this.cardTypeImageOutput = this.card.querySelector(
       this.selectors.cardTypeImageOutput
     );
     this.cardNumberContainer = this.card.querySelector(
@@ -126,6 +126,11 @@ class CardForm {
     this.bindEvents();
   }
 
+  updateCardTypeImage(cardType) {
+    this.cardTypeImageOutput.src = `images/${cardType}.png`;
+    this.cardTypeImageOutput.setAttribute('alt', cardType);
+  }
+
   updateCardType(cardType) {
     this.currentCardType = cardType;
 
@@ -135,13 +140,7 @@ class CardForm {
     this.cardCvcControl.maxLength = cvcMask.length;
     this.cardCvcControl.placeholder = cvcMask;
 
-    this.cardTypeImageOutputs.forEach((cardTypeImage) => {
-      cardTypeImage.src = `images/${cardType}.png`;
-      cardTypeImage.setAttribute(
-        'alt',
-        cardType === 'unknown' ? 'unknown card network' : cardType
-      );
-    });
+    this.updateCardTypeImage(cardType);
 
     this.cardNumberContainer.innerHTML = Array.prototype.reduce.call(
       numberMask,
@@ -227,7 +226,7 @@ class CardForm {
     target.value = cardNumber;
 
     const cardType = getCardType(cardNumber);
-    if (this.currentCardType !== cardType && cardNumber.length) {
+    if (this.currentCardType !== cardType) {
       this.updateCardType(cardType);
     }
 

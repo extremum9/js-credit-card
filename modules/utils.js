@@ -49,13 +49,12 @@ export const formatCardNumber = (number) => {
     case 'visa':
     case 'mastercard':
     case 'discover':
+    case 'unknown':
+    default:
       return sanitized
         .slice(0, 16)
         .replace(/(\d{4})/g, '$1 ')
         .trim();
-    case 'unknown':
-    default:
-      return sanitized.slice(0, 16);
   }
 };
 
