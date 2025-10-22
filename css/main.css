@@ -248,6 +248,15 @@ body {
   &.has-error .form-control {
     border-color: var(--color-danger);
   }
+
+  &:focus-within {
+    .form-label {
+      color: var(--color-accent);
+      .has-error & {
+        color: var(--color-danger);
+      }
+    }
+  }
 }
 
 .form-row {
@@ -259,6 +268,7 @@ body {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-dark);
+  transition: color 0.2s ease-in-out;
 }
 
 .form-control {
@@ -268,17 +278,17 @@ body {
   color: var(--color-dark);
   border: 1px solid var(--color-gray);
   border-radius: 0.313rem;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  @media (any-hover: hover) {
-    &:hover {
-      border-color: var(--color-accent);
-    }
+  transition: border-color 0.2s ease-in-out;
+  &::placeholder {
+    transition: color 0.2s ease-in-out;
   }
 
   &:focus {
     outline: 0;
     border-color: var(--color-accent);
-    box-shadow: 0 0.625rem 1.25rem -0.813rem rgba(32, 56, 117, 0.35);
+    &::placeholder {
+      color: transparent;
+    }
   }
 }
 
