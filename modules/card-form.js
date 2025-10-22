@@ -271,6 +271,8 @@ class CardForm {
     target.value = cvc;
 
     this.cardCvcOutput.textContent = '*'.repeat(cvc.length);
+
+    this.tabForward(target);
   };
 
   onBlur = (event) => {
