@@ -1,7 +1,7 @@
 import validators from './validators.js';
 import {
   formatCardNumber,
-  formatCVVCode,
+  formatCvc,
   formatExpiryDate,
   getCardType
 } from './utils.js';
@@ -9,23 +9,23 @@ import {
 const CARD_MASKS = {
   visa: {
     number: 'XXXX XXXX XXXX XXXX',
-    cvv: 'XXX'
+    cvc: 'XXX'
   },
   mastercard: {
     number: 'XXXX XXXX XXXX XXXX',
-    cvv: 'XXX'
+    cvc: 'XXX'
   },
   amex: {
     number: 'XXXX XXXXXX XXXXX',
-    cvv: 'XXXX'
+    cvc: 'XXXX'
   },
   discover: {
     number: 'XXXX XXXX XXXX XXXX',
-    cvv: 'XXX'
+    cvc: 'XXX'
   },
   unknown: {
     number: 'XXXXXXXXXXXXXXXX',
-    cvv: 'XXX'
+    cvc: 'XXX'
   }
 };
 
@@ -46,7 +46,7 @@ class CardForm {
     cardHolderOutput: '.js-card-holder-output',
     cardExpiryDateContainer: '.js-card-expiry-date-container',
     cardExpiryDateOutput: '.js-card-expiry-date-output',
-    cardCVVOutput: '.js-card-cvv-output',
+    cardCvcOutput: '.js-card-cvc-output',
     cardHighlighter: '.js-card-highlighter'
   };
 
@@ -70,9 +70,9 @@ class CardForm {
       validators.required('Enter your expiry date'),
       validators.expiryDate('Incorrect expiry date')
     ],
-    cardCVVCode: [
-      validators.required('Enter your CVV'),
-      validators.cvv('Incorrect CVV')
+    cardCvc: [
+      validators.required('Enter your CVC'),
+      validators.cvc('Incorrect CVC')
     ],
     email: [
       validators.required('Enter your email'),
@@ -85,7 +85,7 @@ class CardForm {
     this.cardNumberControl = this.form.cardNumber;
     this.cardHolderControl = this.form.cardHolder;
     this.cardExpiryDateControl = this.form.cardExpiryDate;
-    this.cardCVVCodeControl = this.form.cardCVVCode;
+    this.cardCvcControl = this.form.cardCvc;
 
     this.card = document.querySelector(this.selectors.card);
     this.cardTypeImageOutputs = this.card.querySelectorAll(
@@ -109,7 +109,7 @@ class CardForm {
     this.cardExpiryDateOutput = this.cardExpiryDateContainer.querySelector(
       this.selectors.cardExpiryDateOutput
     );
-    this.cardCVVOutput = this.card.querySelector(this.selectors.cardCVVOutput);
+    this.cardCvcOutput = this.card.querySelector(this.selectors.cardCvcOutput);
 
     this.cardHighlighter = this.card.querySelector(
       this.selectors.cardHighlighter
@@ -129,11 +129,11 @@ class CardForm {
   updateCardType(cardType) {
     this.currentCardType = cardType;
 
-    const { number: numberMask, cvv: cvvMask } = CARD_MASKS[cardType];
+    const { number: numberMask, cvc: cvcMask } = CARD_MASKS[cardType];
 
     this.cardNumberControl.maxLength = numberMask.length;
-    this.cardCVVCodeControl.maxLength = cvvMask.length;
-    this.cardCVVCodeControl.placeholder = cvvMask;
+    this.cardCvcControl.maxLength = cvcMask.length;
+    this.cardCvcControl.placeholder = cvcMask;
 
     this.cardTypeImageOutputs.forEach((cardTypeImage) => {
       cardTypeImage.src = `images/${cardType}.png`;
@@ -218,7 +218,7 @@ class CardForm {
     this.updateCardType('visa');
     this.cardHolderOutput.textContent = CARD_HOLDER_PLACEHOLDER;
     this.cardExpiryDateOutput.textContent = CARD_EXPIRY_DATE_PLACEHOLDER;
-    this.cardCVVOutput.textContent = '';
+    this.cardCvcOutput.textContent = '';
   }
 
   onCardNumberInput = (event) => {
@@ -265,12 +265,12 @@ class CardForm {
     this.tabForward(target);
   };
 
-  onCardCVVCodeInput = (event) => {
+  onCardCvcInput = (event) => {
     const target = event.target;
-    const cvv = formatCVVCode(target.value);
-    target.value = cvv;
+    const cvc = formatCvc(target.value);
+    target.value = cvc;
 
-    this.cardCVVOutput.textContent = '*'.repeat(cvv.length);
+    this.cardCvcOutput.textContent = '*'.repeat(cvc.length);
   };
 
   onBlur = (event) => {
@@ -304,7 +304,7 @@ class CardForm {
       this.clearHighlight();
     }
 
-    if (target === this.cardCVVCodeControl) {
+    if (target === this.cardCvcControl) {
       this.card.classList.add(this.stateClasses.flip);
     }
   };
@@ -334,7 +334,7 @@ class CardForm {
       'input',
       this.onCardExpiryDateInput
     );
-    this.cardCVVCodeControl.addEventListener('input', this.onCardCVVCodeInput);
+    this.cardCvcControl.addEventListener('input', this.onCardCvcInput);
     this.form.addEventListener('blur', this.onBlur, { capture: true });
     this.form.addEventListener('focus', this.onFocus, { capture: true });
     this.form.addEventListener('submit', this.onSubmit);

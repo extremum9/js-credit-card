@@ -37,7 +37,7 @@ const expiryDateValidator = (date) => {
   return year > currentYear || (year === currentYear && month >= currentMonth);
 };
 
-const CVVCodeValidator = (cvv) => /^\d{3,4}$/.test(cvv);
+const CvcValidator = (cvc) => /^\d{3,4}$/.test(cvc);
 
 const validators = {
   required: (message) => ({
@@ -56,8 +56,8 @@ const validators = {
     validate: expiryDateValidator,
     message
   }),
-  cvv: (message) => ({
-    validate: CVVCodeValidator,
+  cvc: (message) => ({
+    validate: CvcValidator,
     message
   })
 };

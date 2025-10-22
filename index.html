@@ -92,10 +92,10 @@
 
           <div class="card-back">
             <div class="card-strip"></div>
-            <div class="card-cvv">
-              <div class="card-cvv-label">CVV</div>
-              <div class="card-cvv-strip">
-                <span class="js-card-cvv-output"></span>
+            <div class="card-cvc">
+              <div class="card-cvc-label">CVC</div>
+              <div class="card-cvc-strip">
+                <span class="js-card-cvc-output"></span>
               </div>
               <div class="card-type">
                 <img
@@ -163,7 +163,7 @@
             <input
               id="cardExpiryDate"
               class="form-control"
-              data-next="cardCVVCode"
+              data-next="cardCvc"
               name="cardExpiryDate"
               type="tel"
               autocomplete="off"
@@ -181,11 +181,11 @@
           </div>
 
           <div class="form-field">
-            <label class="form-label" for="cardCVVCode">CVV</label>
+            <label class="form-label" for="cardCvc">CVC</label>
             <input
-              id="cardCVVCode"
+              id="cardCvc"
               class="form-control"
-              name="cardCVVCode"
+              name="cardCvc"
               type="password"
               inputmode="numeric"
               autocomplete="off"
@@ -193,10 +193,10 @@
               maxlength="3"
               required
               aria-invalid="false"
-              aria-errormessage="cardCVVCodeError"
+              aria-errormessage="cardCvcError"
             />
             <span
-              id="cardCVVCodeError"
+              id="cardCvcError"
               class="form-field-error js-form-field-error"
               aria-live="polite"
             ></span>

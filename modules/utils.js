@@ -70,4 +70,4 @@ export const formatExpiryDate = (date) => {
     : sanitized;
 };
 
-export const formatCVVCode = (cvv) => sanitizeDigits(cvv).slice(0, 4);
+export const formatCvc = (cvc) => sanitizeDigits(cvc).slice(0, 4);
