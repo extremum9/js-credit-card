@@ -262,7 +262,12 @@ class CardForm {
   onCardExpiryDateInput = (event) => {
     const target = event.target;
     const expiryDate = formatExpiryDate(target.value);
+    const selectionStart = target.selectionStart;
     target.value = expiryDate;
+
+    if (selectionStart < target.value.length - 1) {
+      target.setSelectionRange(selectionStart, selectionStart);
+    }
 
     this.cardExpiryDateOutput.textContent = expiryDate.length
       ? expiryDate
