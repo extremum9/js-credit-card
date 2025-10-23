@@ -131,19 +131,11 @@ class CardForm {
     this.cardTypeImageOutput.setAttribute('alt', cardType);
   }
 
-  updateCardType(cardType) {
-    this.currentCardType = cardType;
-
-    const { number: numberMask, cvc: cvcMask } = CARD_MASKS[cardType];
+  updateCardNumberMask(cardType) {
+    const numberMask = CARD_MASKS[cardType].number;
 
     this.cardNumberControl.maxLength = numberMask.length;
-    this.cardCvcControl.maxLength = cvcMask.length;
-    this.cardCvcControl.placeholder = cvcMask;
-
-    this.updateCardTypeImage(cardType);
-
-    this.cardNumberContainer.innerHTML = Array.prototype.reduce.call(
-      numberMask,
+    this.cardNumberContainer.innerHTML = [...numberMask].reduce(
       (template, char) => {
         if (char === ' ') {
           template += `<div class="card-number-item card-number-item-blank js-card-number-item"></div>`;
@@ -154,10 +146,26 @@ class CardForm {
       },
       ''
     );
-
     this.cardNumberItems = this.cardNumberContainer.querySelectorAll(
       this.selectors.cardNumberItem
     );
+  }
+
+  updateCardCvcMask(cardType) {
+    const cvcMask = CARD_MASKS[cardType].cvc;
+
+    this.cardCvcControl.maxLength = cvcMask.length;
+    this.cardCvcControl.placeholder = cvcMask;
+  }
+
+  updateCardNumber(cardNumber) {
+    this.cardNumberItems.forEach((item, index) => {
+      const oldChar = item.textContent.trim();
+      const newChar = cardNumber[index]?.trim() ?? '#';
+      if (oldChar && oldChar !== newChar) {
+        item.textContent = newChar;
+      }
+    });
   }
 
   updateError(control, errorMessage) {
@@ -193,13 +201,11 @@ class CardForm {
 
   highlight(element) {
     const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = element;
-
     Object.assign(this.cardHighlighter.style, {
       width: `${offsetWidth}px`,
       height: `${offsetHeight}px`,
       translate: `${offsetLeft}px ${offsetTop}px`
     });
-
     this.cardHighlighter.classList.add(this.stateClasses.highlight);
   }
 
@@ -209,12 +215,13 @@ class CardForm {
       height: '',
       translate: ''
     });
-
     this.cardHighlighter.classList.remove(this.stateClasses.highlight);
   }
 
   clearCard() {
-    this.updateCardType('visa');
+    this.updateCardTypeImage('visa');
+    this.updateCardNumberMask('visa');
+    this.updateCardCvcMask('visa');
     this.cardHolderOutput.textContent = CARD_HOLDER_PLACEHOLDER;
     this.cardExpiryDateOutput.textContent = CARD_EXPIRY_DATE_PLACEHOLDER;
     this.cardCvcOutput.textContent = '';
@@ -227,17 +234,13 @@ class CardForm {
 
     const cardType = getCardType(cardNumber);
     if (this.currentCardType !== cardType) {
-      this.updateCardType(cardType);
+      this.currentCardType = cardType;
+      this.updateCardTypeImage(cardType);
+      this.updateCardNumberMask(cardType);
+      this.updateCardCvcMask(cardType);
     }
 
-    this.cardNumberItems.forEach((item, index) => {
-      const oldChar = item.textContent.trim();
-      const newChar = cardNumber[index]?.trim() ?? '#';
-      if (oldChar && oldChar !== newChar) {
-        item.textContent = newChar;
-      }
-    });
-
+    this.updateCardNumber(cardNumber);
     this.tabForward(target);
   };
 
@@ -248,7 +251,6 @@ class CardForm {
     this.cardHolderOutput.textContent = cardHolder.length
       ? cardHolder
       : CARD_HOLDER_PLACEHOLDER;
-
     this.tabForward(target);
   };
 
@@ -260,7 +262,6 @@ class CardForm {
     this.cardExpiryDateOutput.textContent = expiryDate.length
       ? expiryDate
       : CARD_EXPIRY_DATE_PLACEHOLDER;
-
     this.tabForward(target);
   };
 
@@ -270,7 +271,6 @@ class CardForm {
     target.value = cvc;
 
     this.cardCvcOutput.textContent = '*'.repeat(cvc.length);
-
     this.tabForward(target);
   };
 
