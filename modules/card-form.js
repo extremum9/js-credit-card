@@ -230,7 +230,12 @@ class CardForm {
   onCardNumberInput = (event) => {
     const target = event.target;
     const cardNumber = formatCardNumber(target.value);
+    const selectionStart = target.selectionStart;
     target.value = cardNumber;
+
+    if (selectionStart < target.value.length - 1) {
+      target.setSelectionRange(selectionStart, selectionStart);
+    }
 
     const cardType = getCardType(cardNumber);
     if (this.currentCardType !== cardType) {
